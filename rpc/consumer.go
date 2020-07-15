@@ -5,6 +5,7 @@ import (
 	"log"
 	"rabbitmq/simple_queue/utils"
 	"strconv"
+	"time"
 )
 
 func main() {
@@ -40,8 +41,10 @@ func main() {
 		false,
 		nil,
 	)
-	forever := make(chan bool)
+	//这种方法无意义
+	//runtime.GOMAXPROCS(runtime.NumCPU())
 
+	forever := make(chan bool)
 	//协程从msgs chan中读取数据
 	go func() {
 		for d := range msgs {
@@ -52,13 +55,12 @@ func main() {
 			d := d
 			go func() {
 
-				// 此处待修改 需要fork子进程去完成任务
-
+				// 此处待修改 需要fork子进程去完成任务   此处应该  fork创建docker 让docker执行完成任务后再返回
 				log.Printf(" [.] fib(%d)", n)
 				response := fib(n)
 				////模拟处理10秒
-				//t := time.Duration(10)
-				//time.Sleep(t * time.Second)
+				t := time.Duration(10)
+				time.Sleep(t * time.Second)
 				// 回调队列
 				_ = ch.Publish(
 					"",        // exchange
