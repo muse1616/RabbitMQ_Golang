@@ -32,7 +32,7 @@ func main() {
 	err = ch.Publish(
 		// 交换机名称
 		"logs",
-		// 交换机是 key为空即可
+		//  key为空即可
 		"",
 		// 默认false即可
 		false,
